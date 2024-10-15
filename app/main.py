@@ -6,7 +6,7 @@ from app.api.v1.endpoints import auth, users
 from app.core.config import settings
 
 app = FastAPI(
-    title="Auth Service",
+    title="Pymiser",
     version="1.0.0",
 )
 
