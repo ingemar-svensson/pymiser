@@ -1,0 +1,10 @@
+# deployments/kubernetes/pymiser-service-configmap.yaml
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pymiser-service-config
+data:
+  MONGO_URI: "mongodb://mongo:27017"
+  DATABASE_NAME: "auth_db"
+  ACCESS_TOKEN_EXPIRE_MINUTES: "30"

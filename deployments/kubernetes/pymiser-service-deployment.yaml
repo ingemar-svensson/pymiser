@@ -1,0 +1,66 @@
+# deployments/kubernetes/pymiser-service-deployment.yaml
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pymiser-service
+  labels:
+    app: pymiser-service
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: pymiser-service
+  template:
+    metadata:
+      labels:
+        app: pymiser-service
+    spec:
+      containers:
+      - name: pymiser-container
+        image: your-dockerhub-username/auth-service:latest
+        ports:
+        - containerPort: 8000
+        env:
+        - name: MONGO_URI
+          valueFrom:
+            configMapKeyRef:
+              name: pymiser-service-config
+              key: MONGO_URI
+        - name: DATABASE_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: pymiser-service-config
+              key: DATABASE_NAME
+        - name: ACCESS_TOKEN_EXPIRE_MINUTES
+          valueFrom:
+            configMapKeyRef:
+              name: pymiser-service-config
+              key: ACCESS_TOKEN_EXPIRE_MINUTES
+        - name: SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: pymiser-service-secret
+              key: SECRET_KEY
+        - name: GOOGLE_CLIENT_ID
+          valueFrom:
+            secretKeyRef:
+              name: pymiser-service-secret
+              key: GOOGLE_CLIENT_ID
+        - name: GOOGLE_CLIENT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: pymiser-service-secret
+              key: GOOGLE_CLIENT_SECRET
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 15
+          periodSeconds: 20

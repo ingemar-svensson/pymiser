@@ -1,0 +1,16 @@
+# deployments/kubernetes/pymiser-service-service.yaml
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: pymiser-service
+  labels:
+    app: pymiser-service
+spec:
+  selector:
+    app: pymiser-service
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8000
+  type: ClusterIP
